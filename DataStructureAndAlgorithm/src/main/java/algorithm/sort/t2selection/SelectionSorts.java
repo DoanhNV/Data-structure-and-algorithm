@@ -1,5 +1,5 @@
 package algorithm.sort.t2selection;
-import static algorithm.sort.DataManager.*;
+import static algorithm.simple_sorting.DataManager.*;
 
 public class SelectionSorts {
 	

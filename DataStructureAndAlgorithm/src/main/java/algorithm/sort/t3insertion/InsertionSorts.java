@@ -1,6 +1,6 @@
 package algorithm.sort.t3insertion;
 
-import static algorithm.sort.DataManager.*;
+import static algorithm.simple_sorting.DataManager.*;
 
 public class InsertionSorts {
 	
