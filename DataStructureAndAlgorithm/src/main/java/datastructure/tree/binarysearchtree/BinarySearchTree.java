@@ -82,7 +82,9 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractTree<T> {
 		}
 
 		if (current == root) {
-			root = null;
+			root = current.getLeftChild() != null 
+												? root.getLeftChild() 
+														: root.getRightChild();
 		} else if (current.getLeftChild() == null && current.getRightChild() == null) {
 			if (isLeftChild) {
 				parrent.setLeftChild(null);
