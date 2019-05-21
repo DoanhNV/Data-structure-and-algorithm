@@ -3,15 +3,18 @@ package datastructure.tree.redblacktree;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+import datastructure.tree.binarysearchtree.BinarySearchTree;
+
 /**
  * 
  * @author DoanhNV May 19, 2019 - 11:08:27 PM
  *
  */
-public class RedBlackTree<T extends Comparable<T>> {
+public class RedBlackTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
 	private Node<T> root;
 	
+	@Override
 	public void insert(T data) {
 		Node<T> newNode = new Node<T>(data);
 		
@@ -40,7 +43,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 					if (isLeftParrent) {
 						if (!isLeft) {
 							rotateLeft(grandParent, parent, current, isLeftParrent, false);
-							raseChild = current;
+							raseChild = current; // if parrent is reindexed
 						}
 						rotateRight(grandParent, grandParent, raseChild, isLeftParrent, true);
 					} else {
@@ -52,14 +55,14 @@ public class RedBlackTree<T extends Comparable<T>> {
 					}
 				}
 				
-				grandParent = parent;
-				parent = current;
 				isLeftOldestMan = isLeftParrent;
 				isLeftParrent = isLeft;
 				
 				int compareResult = data.compareTo(current.data);
 				if (compareResult < 0 ) {
 					if (current.leftChild != null) {
+						grandParent = parent;
+						parent = current;
 						current = current.leftChild;
 					} else {
 						isLeaf = true;
@@ -67,6 +70,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 					isLeft = true;
 				} else {
 					if (current.rightChild != null) {
+						grandParent = parent;
+						parent = current;
 						current = current.rightChild;
 					} else {
 						isLeaf = true;
@@ -76,13 +81,12 @@ public class RedBlackTree<T extends Comparable<T>> {
 			}
 			
 			if (isLeft) {
-				parent.leftChild = newNode;
+				current.leftChild = newNode;
 			} else {
-				parent.rightChild = newNode;
+				current.rightChild = newNode;
 			}
 			
 			if (!current.isBlack) {
-				System.out.println(grandParent.data + " - " + parent.data  + " - " + current.data + " - " + newNode.data);
 				Node<T> raiseChild = current;
 				if (isLeftParrent) {
 					if (!isLeft) {
@@ -98,23 +102,24 @@ public class RedBlackTree<T extends Comparable<T>> {
 					rotateLeft(grandParent, parent, raiseChild, isLeftOldestMan, false);
 				}
 			} 
+			this.displayTree();
 		}
 	}
 
-	private void flipColor(Node<T> parrent, Node<T> leftChild, Node<T> rightChild) {
-		if (parrent != root) {
-			parrent.isBlack = false;
+	private void flipColor(Node<T> parent, Node<T> leftChild, Node<T> rightChild) {
+		if (parent != root) {
+			parent.isBlack = false;
 		}
-		parrent.leftChild.isBlack = true;
-		parrent.rightChild.isBlack = true;
+		parent.leftChild.isBlack = true;
+		parent.rightChild.isBlack = true;
 	}
 	
-	private void rotateRight(Node<T> grandParrent, Node<T> parrent, Node<T> child, boolean isLeftParrent, boolean isRootBalancing) {
-		parrent.leftChild = child.rightChild;
-		child.rightChild = parrent;
+	private void rotateRight(Node<T> grandParent, Node<T> parent, Node<T> child, boolean isLeftParrent, boolean isRootBalancing) {
+		parent.leftChild = child.rightChild;
+		child.rightChild = parent;
 		
-		boolean parrentColor = parrent.isBlack;
-		parrent.isBlack = child.isBlack;
+		boolean parrentColor = parent.isBlack;
+		parent.isBlack = child.isBlack;
 		child.isBlack = parrentColor;
 		
 		if (isRootBalancing) {
@@ -123,14 +128,14 @@ public class RedBlackTree<T extends Comparable<T>> {
 			return;
 		} else {
 			Node<T> tempNode = child;
-			child = parrent; // reindex cursor
-			parrent = tempNode; // reindex cursor
+			child = parent; // reindex child cursor
+			parent = tempNode; // reindex parent cursor
 		}
 		
 		if (isLeftParrent) {
-			grandParrent.leftChild = parrent;
+			grandParent.leftChild = parent;
 		} else {
-			grandParrent.rightChild = parrent;
+			grandParent.rightChild = parent;
 		}
 	}
 
@@ -147,8 +152,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 			return;
 		} else {
 			Node<T> tempNode = child;
-			child = parrent; // reindex cursor
-			parrent = tempNode; // reindex cursor
+			child = parrent; // reindex child cursor
+			parrent = tempNode; // reindex parrent cursor
 		}
 		if (isLeftParrent) {
 			grandParrent.leftChild = parrent;
@@ -157,6 +162,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 		}
 	}
 	
+	@Override
 	public void traverse(Consumer<T> consumer) {
 		inOrder(root, consumer);
 	}
@@ -170,6 +176,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 	}
 	
 	
+	// function copy from binary search tree
 	public void displayTree()
 	{
 		Stack<Node<T>> globalStack = new Stack<>();
