@@ -18,7 +18,7 @@ public class Main {
 		tree.insert(28);
 		tree.insert(26);
 		tree.insert(34);
-		//tree.insert(33);
-		tree.displayTree();
+		tree.insert(33);
+		//tree.displayTree();
 	}
 }

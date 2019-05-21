@@ -82,6 +82,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 			}
 			
 			if (!current.isBlack) {
+				System.out.println(grandParent.data + " - " + parent.data  + " - " + current.data + " - " + newNode.data);
 				Node<T> raiseChild = current;
 				if (isLeftParrent) {
 					if (!isLeft) {
@@ -99,7 +100,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 			} 
 		}
 	}
-	
+
 	private void flipColor(Node<T> parrent, Node<T> leftChild, Node<T> rightChild) {
 		if (parrent != root) {
 			parrent.isBlack = false;
