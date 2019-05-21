@@ -87,7 +87,6 @@ public class RedBlackTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			}
 			
 			if (!current.isBlack) {
-				this.displayTree();
 				Node<T> raiseChild = current;
 				if (isLeftParrent) {
 					if (!isLeft) {
