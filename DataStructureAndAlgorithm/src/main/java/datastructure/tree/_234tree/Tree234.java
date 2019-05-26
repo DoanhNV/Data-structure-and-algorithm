@@ -81,15 +81,27 @@ public class Tree234<T extends Comparable<T>>  implements AbstractTree<T> {
 		return maxItem;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean find(T item) {
-		// TODO Auto-generated method stub
+	public boolean exist(T item) {
+		Node<T> current = root;
+		while (current != null) {
+			for (int i = 0; i < current.dataNumber; i++) {
+				int compareResult = item.compareTo((T) current.dataItems[i]);
+				if (compareResult == 0) {
+					return true;
+				} else if (compareResult == -1) {
+					current = current.getChild(i);
+				} else if (i == current.dataNumber - 1) {
+					current = current.getChild(i + 1);
+				}
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public void displayTree() {
-		// TODO Auto-generated method stub
 		
 	}
 }

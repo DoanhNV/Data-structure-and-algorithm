@@ -7,6 +7,6 @@ package datastructure.tree._234tree;
  */
 public interface AbstractTree<T extends Comparable<T>>  {
 	void insert(T item);
-	boolean find(T item);
+	boolean exist(T item);
 	void displayTree();
 }
