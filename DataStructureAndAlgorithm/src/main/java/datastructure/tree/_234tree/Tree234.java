@@ -19,19 +19,26 @@ public class Tree234<T extends Comparable<T>>  implements AbstractTree<T> {
 			Node<T> current = root;
 			int indexAtParent = 0 ;
 			
+			if (item.equals(35)) {
+				System.out.println();
+			}
+			
 			while (true) {
 				if (current.isFull()) {
-					splitNode(current, indexAtParent);
+					boolean isRoot = splitNode(current, indexAtParent);
+					current = isRoot ? root : current.parrent;
 				} else if (current.isLeaf()) {
 					break;
 				} 
 				indexAtParent = getNextChild(current, item);
+				current =  current.getChild(indexAtParent);
 			}
 			current.insertAtLeaf(item);
 		}
 	}
 	
-	private void splitNode(Node<T> node, int indexAtParent) {
+	private boolean splitNode(Node<T> node, int indexAtParent) {
+		boolean isRoot = false;
 		int rightIndex = 2;
 		T rightItem = (T) node.popItem(rightIndex);
 		Node<T> newRightNode = new Node<>(rightItem);
@@ -43,11 +50,15 @@ public class Tree234<T extends Comparable<T>>  implements AbstractTree<T> {
 			root = new Node<>(centerItem);
 			root.connectChild(0, node);
 			root.connectChild(1, newRightNode);
+			newRightNode.parrent = root;
+			node.parrent = root;
+			isRoot = true;
 		} else {
 			insertItemForParent(node, indexAtParent);
 			node.parrent.connectChild(indexAtParent + 1, newRightNode);
+			newRightNode.parrent = node.parrent;
 		}
-		node = node.parrent;
+		return isRoot;
 	}
 	
 	private void insertItemForParent(Node<T> node, int indexAtParent) {
@@ -63,22 +74,17 @@ public class Tree234<T extends Comparable<T>>  implements AbstractTree<T> {
 	
 	@SuppressWarnings("unchecked")
 	private int getNextChild(Node<T> current, T newItem) {
-		int maxItem = 3;
-		for (int i = 0; i < current.dataItems.length; i++) {
-			if (current.dataItems[i] == null) {
-				break;
-			}
-			
+		int i;
+		for (i = 0; i < current.dataNumber; i++) {
 			T arrItem = (T) current.dataItems[i];
 			int compareResult = newItem.compareTo(arrItem);
 			if (compareResult == -1) {
-				current =  current.getChild(i);
 				return i;
 			}
 		}
 		
-		current =  current.getChild(maxItem);
-		return maxItem;
+		i = i == current.dataNumber - 1 ? i : i++;
+		return i;
 	}
 
 	@SuppressWarnings("unchecked")

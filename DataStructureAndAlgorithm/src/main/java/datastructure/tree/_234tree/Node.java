@@ -36,13 +36,17 @@ public class Node<T extends Comparable<T>> {
 	
 	protected void connectChild(int index, Node<T> child) {
 		childs[index] = child;
-		childNumber++;
+		if (child != null) {
+			childNumber++;
+		}
 	}
 	
 	protected Node<T> disConnectChild(int index) {
 		Node<T> child = childs[index]; 
 		childs[index] = null;
-		childNumber--;
+		if (childNumber >0) {
+			childNumber--;
+		}
 		return child;
 	}
 	
@@ -52,6 +56,11 @@ public class Node<T extends Comparable<T>> {
 		dataItems[index] = null;
 		dataNumber--;
 		return (T) item;
+	}
+	
+	private void shiftRight(int index) {
+		dataItems[index + 1] = dataItems[index];
+		dataItems[index] = null;
 	}
 	
 	/**
@@ -71,13 +80,14 @@ public class Node<T extends Comparable<T>> {
 				
 				int compareResult = newItem.compareTo(dataItem);
 				if (compareResult == -1) {
-					dataItems[i + 1] = this.popItem(i);
+					shiftRight(i);
 				} else {
 					i++;
 					break;
 				}
 			}
 		}
+		i = i < 0 ? ++i : i;
 		dataItems[i] = newItem;
 		dataNumber++;
 	}
